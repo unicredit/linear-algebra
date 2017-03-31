@@ -8,3 +8,5 @@ tests/all
 tests/cublas
 *.ndb
 nimsuggest.log
+bin/
+.DS_Store
