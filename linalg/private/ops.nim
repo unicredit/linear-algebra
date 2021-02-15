@@ -166,10 +166,7 @@ template maxIndexPrivate(N, v: untyped): auto =
       m = val
   (j, m)
 
-proc maxIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
-  maxIndexPrivate(N, v)
-
-proc maxIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
+proc maxIndex*[N: static[int], T](v: Vector[N, T]): tuple[i: int, val: T] =
   maxIndexPrivate(N, v)
 
 proc maxIndex*(v: DVector32): tuple[i: int, val: float32] =
@@ -190,10 +187,7 @@ template minIndexPrivate(N, v: untyped): auto =
       m = val
   return (j, m)
 
-proc minIndex*[N: static[int]](v: Vector32[N]): tuple[i: int, val: float32] =
-  minIndexPrivate(N, v)
-
-proc minIndex*[N: static[int]](v: Vector64[N]): tuple[i: int, val: float64] =
+proc minIndex*[N: static[int], T](v: Vector[N, T]): tuple[i: int, val: T] =
   minIndexPrivate(N, v)
 
 proc minIndex*(v: DVector32): tuple[i: int, val: float32] =

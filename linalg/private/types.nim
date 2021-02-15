@@ -13,35 +13,31 @@
 # limitations under the License.
 
 type
-  Vector32*[N: static[int]] = ref array[N, float32]
-  Vector64*[N: static[int]] = ref array[N, float64]
-  Matrix32*[M, N: static[int]] = object
+  Vector*[N: static[int], T: SomeReal] = ref array[N, T]
+  Matrix*[M, N: static[int], T: SomeReal] = object
     order: OrderType
-    data: ref array[N * M, float32]
-  Matrix64*[M, N: static[int]] = object
-    order: OrderType
-    data: ref array[M * N, float64]
-  DVector32* = seq[float32]
-  DVector64* = seq[float64]
-  DMatrix32* = ref object
+    data: ref array[N * M, T]
+  DVector*[T: SomeReal] = seq[T]
+  DMatrix*[T: SomeReal] = ref object
     order: OrderType
     M, N: int
-    data: seq[float32]
-  DMatrix64* = ref object
-    order: OrderType
-    M, N: int
-    data: seq[float64]
-  AnyVector = Vector32 or Vector64 or DVector32 or DVector64
-  AnyMatrix = Matrix32 or Matrix64 or DMatrix32 or DMatrix64
+    data: seq[T]
+
+  Vector32*[N: static[int]] = Vector[N, float32]
+  Vector64*[N: static[int]] = Vector[N, float64]
+  Matrix32*[M, N: static[int]] = Matrix[M, N, float32]
+  Matrix64*[M, N: static[int]] = Matrix[M, N, float64]
+  DVector32* = DVector[float32]
+  DVector64* = DVector[float64]
+  DMatrix32* = DMatrix[float32]
+  DMatrix64* = DMatrix[float64]
+  AnyVector = Vector32 or Vector64 or DVector32 or DVector64 or Vector
+  AnyMatrix = Matrix32 or Matrix64 or DMatrix32 or DMatrix64 or Matrix
 
 # Float pointers
-template fp(v: Vector32): ptr float32 = cast[ptr float32](addr(v[]))
+template fp[N,T](v: Vector[N,T]): ptr T = cast[ptr T](addr(v[]))
 
-template fp(v: Vector64): ptr float64 = cast[ptr float64](addr(v[]))
-
-template fp(m: Matrix32): ptr float32 = cast[ptr float32](addr(m.data[]))
-
-template fp(m: Matrix64): ptr float64 = cast[ptr float64](addr(m.data[]))
+template fp[M,N,T](m: Matrix[M,N,T]): ptr T = cast[ptr T](addr(m.data[]))
 
 template fp(v: DVector32): ptr float32 = cast[ptr float32](unsafeAddr(v[0]))
 
